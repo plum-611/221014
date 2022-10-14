@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <style type="text/css">
+    @font-face {
+    font-family: 'SBAggroB';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    }
+                #gate {
+                  cursor: pointer;
+                  
+                  width: 400px;
+                  height: auto;
+                }
+
+                #tt {
+                  cursor: pointer;
+                  width: 100px;
+                  height: auto;
+                }
+
+    .ff{font-size: 5em; font-family:'SBAggroB'; text-align: center;}
+
+    .f2{font-size: 2em; font-family:'SBAggroB'; text-align: center;}
+
+    .bk{z-index: -1;}
+
+    body{margin: 0;background-size:cover; background-repeat: no-repeat;}
+
+    .ww{width: 200px; height: auto; position: absolute; left: 0; top: 0;}
+
+  
+
+        </style>
+        <title>5주차 과제 4</title>
+</head>
+<body style="background-image: url(park.png);" class="bk">
+<div>
+  <p class="ff" > 🗑쓰레기 치워라🗑</p>
+  <div style="text-align: center;">
+  <img src="gar.png" id="gate" class="droppable">
+  
+   
+  
+</div>
+  </div>
+  <p style="text-align: center;" class="f2">당신이 모은 쓰레기의 갯수</p>
+  <div id="display" style="text-align: center;" class="f2"> </div>
+   <script>
+
+    var a = ["trash1.png","trash2.png","trash3.png","trash4.png","trash5.png","trash6.png","trash7.png","trash8.png","trash9.png","trash10.png","trash11.png","trash12.png","trash13.png","trash14.png","trash15.png","trash16.png","trash17.png","trash18.png"];
+
+
+ var score = 0;
+
+     let currentDroppable = null;
+
+
+for(let i=0; i<a.length;i++){
+  let t = document.createElement("img");
+  t.className = "ww";
+  t.id = "ball"+i;
+  t.src = a[i];
+  t.style.left = Math.random()*screen.availWidth + "px";
+  t.style.top =Math.random()*screen.availHeight + "px";
+
+  console.log("ball"+i, "trash" + i + ".png");
+  document.body.appendChild(t);
+
+  t.onmousedown = function(event) {
+
+      let a = this.id;
+      let b = document.getElementById(a);
+
+      let shiftX = event.clientX - b.getBoundingClientRect().left;
+      let shiftY = event.clientY - b.getBoundingClientRect().top;
+
+      b.style.position = 'absolute';
+      b.style.zIndex = 1000;
+      document.body.append(b);
+
+      moveAt(event.pageX, event.pageY);
+
+      function moveAt(pageX, pageY) {
+        b.style.left = pageX - shiftX + 'px';
+        b.style.top = pageY - shiftY + 'px';
+      }
+
+      function onMouseMove(event) {
+        moveAt(event.pageX, event.pageY);
+
+        b.hidden = true;
+        let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+        b.hidden = false;
+
+        if (!elemBelow) return;
+
+        let droppableBelow = elemBelow.closest('.droppable');
+        if (currentDroppable != droppableBelow) {
+          if (currentDroppable) {
+            leaveDroppable(currentDroppable);
+          }
+          currentDroppable = droppableBelow;
+          if (currentDroppable) {
+            enterDroppable(currentDroppable);
+          }
+        }
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      b.onmouseup = function() {
+        document.removeEventListener('mousemove', onMouseMove);
+        b.onmouseup = null;
+      };
+
+      b.ondragstart = function() {
+        return false;
+      };
+
+    };
+}
+
+
+
+    
+
+
+
+    function enterDroppable(elem) {
+      score++;
+      display.innerHTML = score ;
+    }
+
+    function leaveDroppable(elem) {
+      //score -= 1 ;
+      display.innerHTML = score ;
+    }
+
+    
+
+    function randomBH(min, max){
+                        min = Math.ceil(min);
+                        max = Math.floor(max);
+                        return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+
+
+  
+
+
+  </script>
+</body>
+</html>
